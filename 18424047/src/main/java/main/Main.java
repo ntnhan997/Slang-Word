@@ -42,13 +42,24 @@ public class Main {
         } catch (Exception e) {
             
         }
-        ArrayList<ArrayList> wordxx = new ArrayList<ArrayList>(hashmap.values());
-        for (ArrayList i:wordxx){
-            System.out.println(i);
+    }
+    
+    public static void TimKiemSlangWord(HashMap<String, ArrayList<String>> hashmap) throws IOException{
+        System.out.println("Nhap tu can tim: ");
+        Scanner input = new Scanner(System.in);
+        String Acronym = input.nextLine();
+        if(hashmap.get(Acronym) == null){
+            System.out.println("******Khong Co Tu Ban Can Tim.");
+            return;
+        }
+        for(int i = 0 ; i < hashmap.get(Acronym).size(); i++){
+            System.out.println("Nghia Thu "+ (i + 1) +":");
+            System.out.println(hashmap.get(Acronym).get(i));
         }
     }
     
-    public static void NhapMenu() throws IOException{
+    
+    public static void NhapMenu(HashMap<String, ArrayList<String>> hashmap) throws IOException{
         int chon;
         while(true){
             System.out.println("========================Menu=======================.");
@@ -68,7 +79,7 @@ public class Main {
             chon = input.nextInt();
             switch(chon){
                 case 1:
-                    System.out.println("hello 1");
+                    TimKiemSlangWord(hashmap);
                     break;
                 case 2:
                     System.out.println("hello 2");
@@ -110,7 +121,7 @@ public class Main {
     public static void main(String[] args) throws IOException{
             HashMap<String, ArrayList<String>> hashmap = new HashMap<String, ArrayList<String>>(); 
             DocFile(hashmap);
-            NhapMenu();
+            NhapMenu(hashmap);
 //        System.out.println("Nhap tu can tim: ");
 //        Scanner input = new Scanner(System.in);
 //        String Acronym = input.nextLine();
