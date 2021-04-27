@@ -6,7 +6,9 @@
 package main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +21,9 @@ import java.util.Scanner;
  * @author nguye
  */
 public class Features {
-    public List<SlangWord> list = new ArrayList<>();
-    public HashMap<String, ArrayList<String>> hashmap = new HashMap<String, ArrayList<String>>();
+    public static List<SlangWord> list = new ArrayList<>();
+    public static HashMap<String, ArrayList<String>> hashmap = new HashMap<String, ArrayList<String>>();
+    public static ArrayList<String> history = new ArrayList<>();
      public static void DocFile(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
        String line = "";
         try {
@@ -49,12 +52,24 @@ public class Features {
             }
             hashmap.put(list.get(i).getAcronym(), word);
         }
+        
+        String row = "";
+          try {
+            BufferedReader csvReader = new BufferedReader(new FileReader("history.txt"));
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split("/n");
+                history.add(data[0]);
+        }
+        } catch (Exception e) {
+            
+        }
     }
     
     public static void TimKiemSlangWord(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
         System.out.println("Nhap tu can tim (Slang Word): ");
         Scanner input = new Scanner(System.in);
         String Acronym = input.nextLine();
+        history.add(Acronym);
         if(hashmap.get(Acronym) == null){
             System.out.println("******Khong Co Tu Ban Can Tim.");
             return;
@@ -63,6 +78,13 @@ public class Features {
             System.out.println("Nghia Thu "+ (i + 1) +":");
             System.out.println(hashmap.get(Acronym).get(i));
         }
+        
+        FileWriter writer = new FileWriter("history.txt");  
+        BufferedWriter buffer = new BufferedWriter(writer);  
+        for(int i = 0; i < history.size(); i++){
+            buffer.write(history.get(i));  
+        }
+        
     }
    
     
@@ -70,6 +92,7 @@ public class Features {
         System.out.println("Nhap tu can tim (definition): ");
         Scanner input = new Scanner(System.in);
         String Word = input.nextLine();
+        history.add(Word);
         if((hashmap.values().stream().anyMatch(item -> item.contains(Word))) == false){
             System.out.println("******Khong Co Tu Ban Can Tim.");
             return;
@@ -84,7 +107,18 @@ public class Features {
                 }
             }
         }
+        FileWriter writer = new FileWriter("history.txt");  
+        BufferedWriter buffer = new BufferedWriter(writer);  
+        for(int i = 0; i < history.size(); i++){
+            buffer.write(history.get(i));  
+        }
     }
+      
+      public static void history (ArrayList<String> history) throws IOException{
+          for(int i = 0; i < history.size(); i ++){
+              System.out.println(history.get(i));
+          }
+      }
     
     
     public static void NhapMenu(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
@@ -113,7 +147,7 @@ public class Features {
                     TimKiemDefinition(list,hashmap);
                     break;
                 case 3:
-                    System.out.println("hello 3");
+                    history(history);
                     break;
                 case 4:
                     System.out.println("hello 4");
