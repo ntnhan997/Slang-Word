@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -195,6 +196,13 @@ public class Features {
         }
         
       }
+       
+     public static void SlangWordNgauNhien() throws IOException{
+         Random rand = new Random();
+         int range = hashmap.size();
+         int songaunhien = rand.nextInt(range);
+         System.out.println(list.get(songaunhien).toString());
+     }
     
     
     public static void NhapMenu(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
@@ -238,7 +246,7 @@ public class Features {
                     System.out.println("hello 7");
                     break;
                 case 8:
-                    System.out.println("hello 8");
+                    SlangWordNgauNhien();
                     break;
                 case 9:
                     System.out.println("hello 9");
