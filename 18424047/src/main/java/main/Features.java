@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -203,6 +204,32 @@ public class Features {
          int songaunhien = rand.nextInt(range);
          System.out.println(list.get(songaunhien).toString());
      }
+     
+     public static void Quizz1(){
+         Random rand = new Random();
+         int range = hashmap.size();
+         int songaunhien = rand.nextInt(range);
+         System.out.println("Nghia cua tu "+ list.get(songaunhien).getAcronym() + " la gi?");
+         ArrayList<String> answer = new ArrayList<>();
+         String a = hashmap.get(list.get(songaunhien).getAcronym()).get(0);
+         answer.add(a);
+         for(int i = 0; i < 3; i ++){
+             int so = rand.nextInt(range);
+             String b = hashmap.get(list.get(so).getAcronym()).get(0);
+             answer.add(b);
+         }
+         Collections.sort(answer);
+         System.out.println("1. "+ answer.get(0) +"           2. "+ answer.get(1));
+         System.out.println("3. "+ answer.get(2) +"           4. "+ answer.get(3));
+         System.out.println("Moi ban nhap dap an: ");
+         Scanner input = new Scanner(System.in);
+         int chon = input.nextInt();
+         if(answer.get(chon-1).equals(a)){
+             System.out.println("Chuc mung ban chon dung!");
+             return;
+         }
+         System.out.println("Ban da chon sai, dap an la: "+ a);
+     }
     
     
     public static void NhapMenu(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
@@ -249,7 +276,7 @@ public class Features {
                     SlangWordNgauNhien();
                     break;
                 case 9:
-                    System.out.println("hello 9");
+                    Quizz1();
                     break;
                 case 10:
                     System.out.println("hello 10");
