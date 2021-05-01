@@ -5,11 +5,17 @@
  */
 package main;
 
+import static java.awt.SystemColor.text;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -119,6 +125,76 @@ public class Features {
               System.out.println(history.get(i));
           }
       }
+      
+       public static void ThemMoi (List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
+        System.out.println("Moi ban nhap Slang Word");
+        Scanner input = new Scanner(System.in);
+        String Word = "";
+        String Acronym = input.nextLine();
+        if(hashmap.get(Acronym) != null){
+            System.out.println("Slang Word da trung");
+            System.out.println("    1. Ghi de");
+            System.out.println("    2. Ban sao");
+            input = new Scanner(System.in);
+            int chon = input.nextInt();
+            System.out.println("Moi ban nhap nghia cua tu do");
+            input = new Scanner(System.in);
+            Word = input.nextLine();       
+            if(chon == 1){
+                for(int i = 0; i < list.size(); i++){
+                    String text = Acronym + "`"+Word;
+//                        fw.write(text);
+                        Path path = Paths.get("myfile.txt");
+                        try (BufferedWriter writer = Files.newBufferedWriter(path,StandardOpenOption.CREATE)) {
+                        writer.write(text);
+                        } catch (IOException e) {
+                        }
+                    if(list.get(i).getAcronym().equals(Acronym)){
+                        list.get(i).setWord(list.get(i).getWord() + "| " + Word);
+//                        System.out.println(list.get(i));
+                        ArrayList<String> word = new ArrayList<String>();
+                        String[] words = list.get(i).getWord().split("\\| ");
+                        for(String W :words ){
+                            word.add(W);
+                        }
+                        hashmap.replace(Acronym, word);
+                        
+                    }
+                }
+            }
+            if(chon == 2){
+                SlangWord SW = new SlangWord(Acronym, Word);
+                Collections.addAll(list, SW);
+                ArrayList<String> word = new ArrayList<String>();
+                word.add(Word);
+                hashmap.put(Acronym, word);
+                Path path = Paths.get("slang.txt");
+                String text = Acronym + "`"+Word;
+                try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND,StandardOpenOption.CREATE)) {
+                writer.write(text);
+                } catch (IOException e) {
+                }
+            }
+        }
+        if(hashmap.get(Acronym) == null){
+            System.out.println("Moi ban nhap nghia cua tu do");
+            input = new Scanner(System.in);
+            Word = input.nextLine();     
+            SlangWord SW = new SlangWord(Acronym, Word);
+            Collections.addAll(list, SW);
+            ArrayList<String> word = new ArrayList<String>();
+            word.add(Word);
+            hashmap.put(Acronym, word);
+            
+            Path path = Paths.get("slang.txt");
+            String text = Acronym + "`"+Word;
+            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND,StandardOpenOption.CREATE)) {
+            writer.write(text);
+            } catch (IOException e) {
+            }
+        }
+        
+      }
     
     
     public static void NhapMenu(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
@@ -150,7 +226,7 @@ public class Features {
                     history(history);
                     break;
                 case 4:
-                    System.out.println("hello 4");
+                    ThemMoi(list, hashmap);
                     break;
                 case 5:
                     System.out.println("hello 5");
