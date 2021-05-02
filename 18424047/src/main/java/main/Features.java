@@ -8,9 +8,14 @@ package main;
 import static java.awt.SystemColor.text;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -260,6 +265,23 @@ public class Features {
          System.out.println("Ban da chon sai, dap an la: "+ kq);
      }
     
+     public static void KhoiPhucFile(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+    try {
+        is = new FileInputStream(source);
+        os = new FileOutputStream(dest);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) > 0) {
+            os.write(buffer, 0, length);
+        }
+    } finally {
+        System.out.println("Khoi phuc file goc thanh cong");
+        is.close();
+        os.close();
+    }
+}
     
     public static void NhapMenu(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
         int chon;
@@ -299,7 +321,7 @@ public class Features {
                     System.out.println("hello 6");
                     break;
                 case 7:
-                    System.out.println("hello 7");
+                    KhoiPhucFile(new File("slangroot.txt"),new File("slang.txt"));
                     break;
                 case 8:
                     SlangWordNgauNhien();
