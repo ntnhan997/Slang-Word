@@ -230,6 +230,35 @@ public class Features {
          }
          System.out.println("Ban da chon sai, dap an la: "+ a);
      }
+     
+     public static void Quizz2(){
+         Random rand = new Random();
+         int range = hashmap.size();
+         int songaunhien = rand.nextInt(range);
+         String[] nghia = list.get(songaunhien).getWord().split("\\| ");
+         String kq = list.get(songaunhien).getAcronym();
+         int nghiangaunhien = rand.nextInt(nghia.length);
+         System.out.println(nghiangaunhien);
+         System.out.println("Tu Viet Tat cua tu "+ nghia[nghiangaunhien] + " la gi?");
+         ArrayList<String> answer = new ArrayList<>();
+         answer.add(kq);
+         for(int i = 0; i < 3; i ++){
+             int so = rand.nextInt(range);
+             String b = list.get(so).getAcronym();
+             answer.add(b);
+         }
+         Collections.sort(answer);
+         System.out.println("1. "+ answer.get(0) +"           2. "+ answer.get(1));
+         System.out.println("3. "+ answer.get(2) +"           4. "+ answer.get(3));
+         System.out.println("Moi ban nhap dap an: ");
+         Scanner input = new Scanner(System.in);
+         int chon = input.nextInt();
+         if(answer.get(chon-1).equals(kq)){
+             System.out.println("Chuc mung ban chon dung!");
+             return;
+         }
+         System.out.println("Ban da chon sai, dap an la: "+ kq);
+     }
     
     
     public static void NhapMenu(List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
@@ -279,7 +308,7 @@ public class Features {
                     Quizz1();
                     break;
                 case 10:
-                    System.out.println("hello 10");
+                    Quizz2();
                     break;
                 case 11:
                     return;
