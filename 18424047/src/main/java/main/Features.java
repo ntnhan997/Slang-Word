@@ -5,7 +5,6 @@
  */
 package main;
 
-import static java.awt.SystemColor.text;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,13 +15,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +47,6 @@ public class Features {
                    
                     SlangWord SW = new SlangWord(data[0], data[1]);
                     Collections.addAll(list, SW);
-
-//                    System.out.println(List.size() + " sadasjdas  " + map.size());
                }
                    
 
@@ -106,19 +103,19 @@ public class Features {
         Scanner input = new Scanner(System.in);
         String Word = input.nextLine();
         history.add(Word);
-        if((hashmap.values().stream().anyMatch(item -> item.contains(Word))) == false){
-            System.out.println("******Khong Co Tu Ban Can Tim.");
-            return;
-        }
         int dem = 1;
         for (String i:hashmap.keySet()){
             for(int j = 0; j < hashmap.get(i).size(); j++){
-                if(Word.equals(hashmap.get(i).get(j))){
+        if(hashmap.get(i).get(j).contains(Word)){
                     System.out.println("Tu viet tat thu " + dem);
-                    System.out.println(i);
+                    System.out.println(i + "       " + hashmap.get(i).get(j));
                     dem++;
                 }
+                        
             }
+        }
+        if(dem == 1){
+            System.out.println("khong co tu ban can tim!");
         }
         FileWriter writer = new FileWriter("history.txt");  
         BufferedWriter buffer = new BufferedWriter(writer);  
@@ -147,27 +144,32 @@ public class Features {
             System.out.println("Moi ban nhap nghia cua tu do");
             input = new Scanner(System.in);
             Word = input.nextLine();       
-            if(chon == 1){
-                for(int i = 0; i < list.size(); i++){
-                    String text = Acronym + "`"+Word;
-//                        fw.write(text);
-                        Path path = Paths.get("myfile.txt");
-                        try (BufferedWriter writer = Files.newBufferedWriter(path,StandardOpenOption.CREATE)) {
-                        writer.write(text);
-                        } catch (IOException e) {
+            if(chon == 1){   
+                File tempFile = new File("temp.txt");
+                String dong;
+                RandomAccessFile raf= new RandomAccessFile(new File("Slang.txt"), "rw");
+                RandomAccessFile tempraf = new RandomAccessFile(tempFile, "rw");
+                raf.seek(0);
+                while (raf.getFilePointer() < raf.length()) {
+                    dong = raf.readLine();
+                    String[] data = dong.split("`");
+                    if(data.length == 2){
+                        if (data[0].equals(Acronym)) {
+                            dong = Acronym + "`"+ data[1] + "| " + Word;
                         }
-                    if(list.get(i).getAcronym().equals(Acronym)){
-                        list.get(i).setWord(list.get(i).getWord() + "| " + Word);
-//                        System.out.println(list.get(i));
-                        ArrayList<String> word = new ArrayList<String>();
-                        String[] words = list.get(i).getWord().split("\\| ");
-                        for(String W :words ){
-                            word.add(W);
-                        }
-                        hashmap.replace(Acronym, word);
-                        
+                        tempraf.writeBytes(dong + System.lineSeparator());
                     }
+                    
                 }
+                raf.seek(0);
+                tempraf.seek(0);
+                KhoiPhucFile(new File("temp.txt"), new File("Slang.txt"));
+                raf.setLength(tempraf.length());
+                tempraf.close();
+                raf.close();
+                tempFile.delete();
+ 
+                System.out.println("Them moi thanh cong. ");
             }
             if(chon == 2){
                 SlangWord SW = new SlangWord(Acronym, Word);
@@ -277,7 +279,7 @@ public class Features {
             os.write(buffer, 0, length);
         }
     } finally {
-        System.out.println("Khoi phuc file goc thanh cong");
+        DocFile(list, hashmap);
         is.close();
         os.close();
     }
@@ -322,6 +324,7 @@ public class Features {
                     break;
                 case 7:
                     KhoiPhucFile(new File("slangroot.txt"),new File("slang.txt"));
+                    System.out.println("Khoi phuc file goc thanh cong");
                     break;
                 case 8:
                     SlangWordNgauNhien();
