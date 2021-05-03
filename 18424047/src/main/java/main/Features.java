@@ -161,9 +161,8 @@ public class Features {
                     }
                     
                 }
-                raf.seek(0);
-                tempraf.seek(0);
                 KhoiPhucFile(new File("temp.txt"), new File("Slang.txt"));
+                DocFile(list, hashmap);
                 raf.setLength(tempraf.length());
                 tempraf.close();
                 raf.close();
@@ -194,7 +193,6 @@ public class Features {
             ArrayList<String> word = new ArrayList<String>();
             word.add(Word);
             hashmap.put(Acronym, word);
-            
             Path path = Paths.get("slang.txt");
             String text = Acronym + "`"+Word;
             try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND,StandardOpenOption.CREATE)) {
@@ -204,6 +202,43 @@ public class Features {
         }
         
       }
+       
+       public static void Xoa (List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
+           System.out.println("Moi ban nhap Slang Word");
+           Scanner input = new Scanner(System.in);
+           String Acronym = input.nextLine();
+            if(hashmap.get(Acronym) == null){
+                System.out.println("******Khong Co Tu Ban Can Xoa.");
+                return;
+            }
+                File tempFile = new File("temp.txt");
+                String dong;
+                RandomAccessFile raf= new RandomAccessFile(new File("Slang.txt"), "rw");
+                RandomAccessFile tempraf = new RandomAccessFile(tempFile, "rw");
+                raf.seek(0);
+                while (raf.getFilePointer() < raf.length()) {
+                    dong = raf.readLine();
+                    String[] data = dong.split("`");
+                    if(data.length == 2){
+                        if (data[0].equals(Acronym)) {
+                            hashmap.remove(Acronym);
+                            list.remove(Acronym);
+                            continue;
+                        }
+                        tempraf.writeBytes(dong + System.lineSeparator());
+                    }
+                    
+                }
+                KhoiPhucFile(new File("temp.txt"), new File("Slang.txt"));
+                raf.setLength(tempraf.length());
+                tempraf.close();
+                raf.close();
+                tempFile.delete();
+ 
+                System.out.println("Xoa thanh cong. ");
+       }
+       
+       
        
      public static void SlangWordNgauNhien() throws IOException{
          Random rand = new Random();
@@ -279,7 +314,6 @@ public class Features {
             os.write(buffer, 0, length);
         }
     } finally {
-        DocFile(list, hashmap);
         is.close();
         os.close();
     }
@@ -320,10 +354,11 @@ public class Features {
                     System.out.println("hello 5");
                     break;
                 case 6:
-                    System.out.println("hello 6");
+                    Xoa(list,hashmap);
                     break;
                 case 7:
                     KhoiPhucFile(new File("slangroot.txt"),new File("slang.txt"));
+                    DocFile(list, hashmap);
                     System.out.println("Khoi phuc file goc thanh cong");
                     break;
                 case 8:

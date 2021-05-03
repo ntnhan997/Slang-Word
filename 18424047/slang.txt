@@ -1095,7 +1095,6 @@ BYOM`BYO Music| BYO Meat
 BYP`Beg Your Pardon
 BYT`Bright Young Thing| Before Your Time
 BYTM`Better You Than Me
-C`See| Computer language| Speed of light| nhan| trung nhan| ha
 C#`Microsoft programming language
 C&C`Command and Conquer (game)
 C&P`Copy & Paste
@@ -7655,4 +7654,3 @@ ZZZ`Sleepy| bored| tired
 ~`Denotes Sarcasm| Put At The End Of A Word To Make It Longer
 Æ`Registered Trademark Symbol
 ô`Trademark
-nhanpro`nhannhan| nhanj
