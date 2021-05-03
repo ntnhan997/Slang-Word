@@ -238,6 +238,96 @@ public class Features {
                 System.out.println("Xoa thanh cong. ");
        }
        
+       public static void CapNhat (List<SlangWord> list, HashMap<String, ArrayList<String>> hashmap) throws IOException{
+           System.out.println("Moi ban nhap Slang Word");
+           Scanner input = new Scanner(System.in);
+           String Acronym = input.nextLine();
+            if(hashmap.get(Acronym) == null){
+                System.out.println("******Khong Co Tu Ban Can Cap Nhat.");
+                return;
+            }
+           System.out.println("Moi ban nhap nghia cua tu");
+           input = new Scanner(System.in);
+           String Word = input.nextLine();
+           File tempFile = new File("temp.txt");
+           String dong;
+           RandomAccessFile raf= new RandomAccessFile(new File("Slang.txt"), "rw");
+            RandomAccessFile tempraf = new RandomAccessFile(tempFile, "rw");
+                raf.seek(0);
+                while (raf.getFilePointer() < raf.length()) {
+                    dong = raf.readLine();
+                    String[] data = dong.split("`");
+                    if(data.length == 2){
+                        if (data[0].equals(Acronym)) {
+                            dong = Acronym + "`"+ Word;    
+                        }
+                        tempraf.writeBytes(dong + System.lineSeparator());
+                    }
+                    
+                }
+                KhoiPhucFile(new File("temp.txt"), new File("Slang.txt"));
+                DocFile(list, hashmap);
+                raf.setLength(tempraf.length());
+                tempraf.close();
+                raf.close();
+                tempFile.delete();
+ 
+                System.out.println("Cap nhat thanh cong. ");
+                
+                
+                
+                
+                
+                
+//                File tempFile = new File("temp.txt");
+//                String dong;
+//                RandomAccessFile raf= new RandomAccessFile(new File("Slang.txt"), "rw");
+//                RandomAccessFile tempraf = new RandomAccessFile(tempFile, "rw");
+//                raf.seek(0);
+//                while (raf.getFilePointer() < raf.length()) {
+//                    dong = raf.readLine();
+//                    String[] data = dong.split("`");
+//                    if(data.length == 2){
+//                        if (data[0].equals(Acronym)) {
+////                            hashmap.remove(Acronym);
+////                            list.remove(Acronym);
+//                              dong = data[0] + "`";
+//                              String[] nghia = data[1].split("\\| ");
+//                              System.out.println("Tu " + Acronym + " co " + nghia.length + " nghia, moi ban chon nghia muon xoa!");
+//                              for(int i = 0; i < nghia.length; i++){
+//                                  System.out.println("Nghia thu " +(i + 1) +  ": " + nghia[i]);
+//                              }
+//                              input = new Scanner(System.in);
+//                              int chon = input.nextInt();
+//                              for(int i = 0; i < nghia.length; i++){
+////                                  if(i == chon - 1){ // nghia == chon - bo qua
+////                                      continue;
+////                                  }
+////                                  if(chon != nghia.length ){ //chon khac cuoi
+////                                     if(i == nghia.length){
+////                                         dong += nghia[i];
+////                                     }else{
+////                                         dong += nghia[i] +"| ";
+////                                     }
+////                                  }else{// chon cuoi
+////                                     if(i == nghia.length - 1){ 
+////                                        dong += nghia[i];
+////                                     }else{
+////                                         dong += nghia[i] +"| ";
+////                                     }
+////                                  }
+//                                    dong += nghia[i] + "| ";
+//                                         
+//                              }
+//                              dong.substring(2, nghia.length);  
+//                        }
+//                        tempraf.writeBytes(dong + System.lineSeparator());
+//                    }
+//                    
+//                }
+       }
+       
+       
        
        
      public static void SlangWordNgauNhien() throws IOException{
@@ -351,7 +441,7 @@ public class Features {
                     ThemMoi(list, hashmap);
                     break;
                 case 5:
-                    System.out.println("hello 5");
+                    CapNhat(list, hashmap);
                     break;
                 case 6:
                     Xoa(list,hashmap);

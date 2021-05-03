@@ -1095,6 +1095,7 @@ BYOM`BYO Music| BYO Meat
 BYP`Beg Your Pardon
 BYT`Bright Young Thing| Before Your Time
 BYTM`Better You Than Me
+C`nhan
 C#`Microsoft programming language
 C&C`Command and Conquer (game)
 C&P`Copy & Paste
